@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qcm:Questionnaire
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:qcm="http://www.example.org/qcm"
+    title="Ingénierie Dirigée par les Modèles - Évaluation"
+    shuffleQuestions="true"
+    allowBack="true">
+  <questions
+      xsi:type="qcm:SingleChoiceQuestion"
+      text="Quelle est la principale utilisation d'EMF dans l'Ingénierie Dirigée par les Modèles?">
+    <answers
+        text="Framework de modélisation et de génération de code"
+        isCorrect="true"/>
+    <answers
+        text="Framework de développement web"/>
+    <answers
+        text="Système de gestion de base de données"/>
+  </questions>
+  <questions
+      xsi:type="qcm:MultipleChoiceQuestion"
+      text="Quels sont les composants qui font partie d'EMF/Ecore?"
+      difficulty="LEVEL_2">
+    <answers
+        text="ECore : méta-métamodèle avec outillage associé"
+        isCorrect="true"/>
+    <answers
+        text="EMF.edit : mécanismes de création d'éditeurs"
+        isCorrect="true"/>
+    <answers
+        text="EMF.SQL : outil d'intégration de base de données"/>
+    <answers
+        text="EMF.Codegen : mécanismes de génération de code"
+        isCorrect="true"/>
+  </questions>
+  <questions
+      xsi:type="qcm:SingleChoiceQuestion"
+      text="Quel est le rôle de XText dans l'IDM?"
+      difficulty="LEVEL_3">
+    <answers
+        text="Fournir une syntaxe concrète textuelle pour les modèles"
+        isCorrect="true"/>
+    <answers
+        text="Générer de la documentation"/>
+    <answers
+        text="Créer des schémas de base de données"/>
+  </questions>
+  <questions
+      xsi:type="qcm:MultipleChoiceQuestion"
+      text="Quels types de transformations de modèles existent en IDM?"
+      difficulty="LEVEL_3">
+    <answers
+        text="M2M (Modèle vers Modèle)"
+        isCorrect="true"/>
+    <answers
+        text="M2T (Modèle vers Texte)"
+        isCorrect="true"/>
+    <answers
+        text="M2D (Modèle vers Base de données)"/>
+  </questions>
+  <questions
+      xsi:type="qcm:SingleChoiceQuestion"
+      text="Quelle est la principale utilisation d'Acceleo en IDM?"
+      difficulty="LEVEL_3">
+    <answers
+        text="Transformations de Modèle vers Texte (M2T)&quot;"
+        isCorrect="true"/>
+    <answers
+        text="Gestion de base de données"/>
+    <answers
+        text="Contrôle de version"/>
+  </questions>
+  <questions
+      xsi:type="qcm:SingleChoiceQuestion"
+      text="What's 2+2">
+    <answers
+        text="4"
+        isCorrect="true"/>
+    <answers
+        text="5"/>
+  </questions>
+</qcm:Questionnaire>

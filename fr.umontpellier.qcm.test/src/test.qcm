@@ -1,0 +1,39 @@
+shuffleQuestions
+Questionnaire {
+    title "Math Quiz"
+    allowBack true
+    questions {
+        SingleChoiceQuestion {
+            text "What is 2+2?"
+            difficulty LEVEL_1
+            answers {
+                Answer {
+                    text "4"
+                    isCorrect true
+                },
+                Answer {
+                    text "5"
+                    isCorrect false
+                }
+            }
+        },
+        MultipleChoiceQuestion {
+            text "Which are prime numbers under 5?"
+            difficulty LEVEL_2
+            answers {
+                Answer {
+                    text "2"
+                    isCorrect true
+                },
+                Answer {
+                    text "3"
+                    isCorrect true
+                },
+                Answer {
+                    text "4"
+                    isCorrect false
+                }
+            }
+        }
+    }
+}

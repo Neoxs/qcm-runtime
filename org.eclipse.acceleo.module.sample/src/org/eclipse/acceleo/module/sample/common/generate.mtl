@@ -1,0 +1,162 @@
+[comment encoding = UTF-8 /]
+[module generate('http://www.example.org/qcm')]
+
+[template public generateElement(questionnaire : Questionnaire)]
+[comment @main/]
+[file ('quiz.html', false, 'UTF-8')]
+<!DOCTYPE html>
+<html>
+<head>
+    <title>[questionnaire.title/] - Quiz</title>
+</head>
+<body style="background-color: #f3f4f6; min-height: 100vh; margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <div id="quiz" style="max-width: 600px; width: 100%; padding: 16px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 10% auto;">
+        <div>
+            <!-- Header -->
+            <div style="margin-bottom: 24px;">
+                <h1 style="font-size: 1.5rem; font-weight: bold; margin: 0;">[questionnaire.title/]</h1>
+                <div id="progress-bar" style="width: 100%; background-color: #e5e7eb; height: 10px; border-radius: 8px; margin-top: 16px; position: relative;">
+                    <div style="background-color: #2563eb; height: 10px; border-radius: 8px; width: 0%;"></div>
+                </div>
+            </div>
+
+            <!-- Questions -->
+
+            [for (question : Question | questionnaire.questions)]
+            <div class="question-page hidden" data-page="[i/]" style="display: none;">
+                <h2 style="font-size: 1.25rem; margin-bottom: 16px;">[question.text/]</h2>
+                <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 16px;">Difficulty: [question.difficulty/]</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                [for (answer : Answer | question.answers)]
+                    <div style="display: flex; align-items: center;">
+                        <input 
+                            type="[if (question.oclIsTypeOf(SingleChoiceQuestion))]radio[else]checkbox[/if]"
+                            name="question[i/]"
+                            value="[answer.text/]"
+                            style="margin-right: 8px;"
+							data-isCorrect="[answer.isCorrect/]">
+                        <label>[answer.text/]</label>
+                    </div>
+                [/for]
+                </div>
+            </div>
+            [/for]
+
+            <!-- Result Page -->
+            <div id="result-page" class="hidden" style="display: none;">
+                <h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 16px;">Quiz Results</h2>
+                <div id="score-display"></div>
+            </div>
+
+            <!-- Navigation -->
+            <div style="display: flex; justify-content: space-between; margin-top: 24px;" id="navigation">
+                [if (questionnaire.allowBack)]
+                <button 
+                    onclick="previousQuestion()"
+                    style="padding: 8px 16px; background-color: #6b7280; color: #ffffff; border: none; border-radius: 4px; cursor: pointer;">
+                    Previous
+                </button>
+                [/if]
+                <button 
+                    onclick="nextQuestion()"
+                    style="padding: 8px 16px; background-color: #2563eb; color: #ffffff; border: none; border-radius: 4px; cursor: pointer;">
+                    Next
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const totalPages = [questionnaire.questions->size()/];
+
+        function showResults() {
+            document.querySelectorAll('.question-page').forEach(page => page.style.display = 'none');
+            document.querySelector('#result-page').style.display = 'block';
+			const navElement = document.getElementById("navigation");
+			navElement.style.display = "none"
+            calculateScore();
+        }
+
+        function calculateScore() {
+		    const scoreDisplay = document.querySelector('#score-display');
+		    let score = 0;
+		    let totalQuestions = 0;
+		
+		    document.querySelectorAll('.question-page').forEach(function(page) {
+		        const inputs = page.querySelectorAll('input');
+		        const questionType = inputs.item(0).type; 
+		        const correctAnswers = Array.prototype.filter.call(inputs, function(input) {
+		            return input.dataset.iscorrect === 'true';
+		        });
+		
+		        totalQuestions = totalQuestions + 1;
+		
+		        if (questionType === 'radio') {
+		            // Single-choice question
+		            const selectedAnswer = Array.prototype.find.call(inputs, function(input) {
+		                return input.checked;
+		            });
+		            if (selectedAnswer && selectedAnswer.dataset.iscorrect === 'true') {
+		                score = score + 1;
+		            }
+		        } else if (questionType === 'checkbox') {
+		            // Multiple-choice question
+		            const selectedAnswers = Array.prototype.filter.call(inputs, function(input) {
+		                return input.checked;
+		            });
+		            
+		            const allCorrect = correctAnswers.every(function(answer) {
+		                return selectedAnswers.indexOf(answer) !== -1;
+		            });
+		            
+		            const noExtra = selectedAnswers.every(function(answer) {
+		                return correctAnswers.indexOf(answer) !== -1;
+		            });
+		
+		            if (allCorrect && noExtra) {
+		                score = score + 1;
+		            }
+		        }
+		    });
+		
+		    scoreDisplay.textContent = 'You scored ' + score + '/' + totalQuestions;
+		}
+
+
+        function updateProgressBar(pageNum) {
+            const progress = (pageNum / totalPages) * 100;
+            document.querySelector('#progress-bar div').style.width = `${progress}%`;
+        }
+
+        function showPage(pageNum) {
+            document.querySelectorAll('.question-page').forEach((page, index) => {
+                page.style.display = (index + 1 === pageNum) ? 'block' : 'none';
+            });
+            updateProgressBar(pageNum);
+        }
+
+        function nextQuestion() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                showPage(currentPage);
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        }
+
+        // Initialize first page
+        showPage(1);
+    </script>
+</body>
+</html>
+[/file]
+[/template]
